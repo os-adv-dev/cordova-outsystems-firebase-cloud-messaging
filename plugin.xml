@@ -26,6 +26,10 @@
       </array>
     </config-file>
 
+    <config-file target="*-Info.plist" parent="LSApplicationQueriesSchemes">
+      <array>$APPLICATION_QUERIES_SCHEMES</array>
+    </config-file>
+
     <config-file target="*-Debug.plist" parent="aps-environment">
       <string>development</string>
     </config-file>
@@ -34,12 +38,45 @@
     </config-file>
 
 		<!-- iOS Source Files -->
-    <source-file src="src/ios/OSFirebaseCloudMessaging.swift" />
+    <source-file src="src/ios/FirebaseCloudMessaging/CoreDataManager/NotificationsModel.xcdatamodeld" />
+    <source-file src="src/ios/FirebaseCloudMessaging/CoreDataManager/CoreDataManager.swift" />
+
+    <source-file src="src/ios/FirebaseCloudMessaging/Extensions/Date+Extension.swift" />
+    <source-file src="src/ios/FirebaseCloudMessaging/Extensions/Encodable+Extension.swift" />
+
+    <source-file src="src/ios/FirebaseCloudMessaging/LocalNotifications/Models/OSLCNOError.swift" />
+
+    <source-file src="src/ios/FirebaseCloudMessaging/LocalNotifications/Protocols/OSLCNOActionDelegate.swift" />
+    <source-file src="src/ios/FirebaseCloudMessaging/LocalNotifications/Protocols/OSLCNOCenterDelegate.swift" />
+    <source-file src="src/ios/FirebaseCloudMessaging/LocalNotifications/Protocols/OSLCNOContentDelegate.swift" />
+
+    <source-file src="src/ios/FirebaseCloudMessaging/LocalNotifications/UNExtensions/UNMutableNotificationContent+Adapter.swift" />
+    <source-file src="src/ios/FirebaseCloudMessaging/LocalNotifications/UNExtensions/UNUserNotificationCenter+Adapter.swift" />
+
+    <source-file src="src/ios/FirebaseCloudMessaging/LocalNotifications/OSLCNOFactory.swift" />
+    <source-file src="src/ios/FirebaseCloudMessaging/LocalNotifications/OSLCNOWrapper.swift" />
+
+    <source-file src="src/ios/FirebaseCloudMessaging/Managers/MessagingManager.swift" />
+    <source-file src="src/ios/FirebaseCloudMessaging/Managers/NotificationManager.swift" />
+
+    <source-file src="src/ios/FirebaseCloudMessaging/Model/OSFCMExtraData.swift" />
+    <source-file src="src/ios/FirebaseCloudMessaging/Model/OSFCMNotification.swift" />
+
+    <source-file src="src/ios/FirebaseCloudMessaging/Protocols/FirebaseMessagingProtocol.swift" />
+    <source-file src="src/ios/FirebaseCloudMessaging/Protocols/MessagingProtocol.swift" />
+    <source-file src="src/ios/FirebaseCloudMessaging/Protocols/UNUserNotificationCenterProtocol.swift" />
+
+    <source-file src="src/ios/FirebaseCloudMessaging/Utils/FirebaseConfigurations.swift" />
+    <source-file src="src/ios/FirebaseCloudMessaging/Utils/FirebaseMessagingErrors.swift" />
+    <source-file src="src/ios/FirebaseCloudMessaging/Utils/FirebaseNotificationEventType.swift" />
+    <source-file src="src/ios/FirebaseCloudMessaging/Utils/OSFCMTokenType.swift" />
+
+    <source-file src="src/ios/FirebaseCloudMessaging/FirebaseMessagingApplicationDelegate.swift" />
+    <source-file src="src/ios/FirebaseCloudMessaging/FirebaseMessagingController.swift" />
+
     <header-file src="src/ios/AppDelegate+OSFirebaseCloudMessaging.h" />
     <source-file src="src/ios/AppDelegate+OSFirebaseCloudMessaging.m" />
-
-    <framework src="src/ios/frameworks/OSFirebaseMessagingLib.xcframework" embed="true" custom="true" />
-    <framework src="src/ios/frameworks/OSLocalNotificationsLib.xcframework" embed="true" custom="true" />
+    <source-file src="src/ios/OSFirebaseCloudMessaging.swift" />
 
     <dependency id="cordova-plugin-add-swift-support" url="https://github.com/OutSystems/cordova-plugin-add-swift-support.git#2.0.3-OS1"/>
 

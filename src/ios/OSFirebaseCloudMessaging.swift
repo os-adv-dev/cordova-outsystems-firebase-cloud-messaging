@@ -1,6 +1,5 @@
 import Foundation
 import OSCommonPluginLib
-import OSFirebaseMessagingLib
 
 @objc(OSFirebaseCloudMessaging)
 class OSFirebaseCloudMessaging: CDVPlugin {
@@ -94,9 +93,11 @@ class OSFirebaseCloudMessaging: CDVPlugin {
             self.sendResult(result: "", error:FirebaseMessagingErrors.sendNotificationsError as NSError, callBackID: self.callbackId)
             return
         }
+        
+        let sound = command.arguments[5] as? String
 
         Task {
-            await self.plugin?.sendLocalNotification(title: title, body: body, badge: badge)
+            await self.plugin?.sendLocalNotification(title: title, body: body, badge: badge, sound: sound)
         }
     }
     
