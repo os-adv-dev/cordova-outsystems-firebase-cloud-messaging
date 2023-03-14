@@ -11,6 +11,7 @@ import com.outsystems.plugins.firebasemessaging.model.database.DatabaseManagerIn
 import com.outsystems.plugins.oscordova.CordovaImplementation
 import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.Dispatchers.Main
 import org.apache.cordova.CallbackContext
 import org.apache.cordova.CordovaInterface
 import org.apache.cordova.CordovaWebView
@@ -96,52 +97,50 @@ class OSFirebaseCloudMessaging : CordovaImplementation() {
 
     override fun execute(action: String, args: JSONArray, callbackContext: CallbackContext): Boolean {
         this.callbackContext = callbackContext
-        val result = runBlocking {
-            when (action) {
-                "ready" -> {
-                    ready()
-                }
-                "getToken" -> {
-                    controller.getToken()
-                }
-                "subscribe" -> {
-                    args.getString(0)?.let { topic ->
-                        controller.subscribe(topic)
-                    }
-                }
-                "unsubscribe" -> {
-                    args.getString(0)?.let { topic ->
-                        controller.unsubscribe(topic)
-                    }
-                }
-                "registerDevice" -> {
-                    registerWithPermission()
-                }
-                "unregisterDevice" -> {
-                    controller.unregisterDevice()
-                }
-                "clearNotifications" -> {
-                    clearNotifications()
-                }
-                "sendLocalNotification" -> {
-                    sendLocalNotification(args)
-                }
-                "setBadge" -> {
-                    setBadgeNumber()
-                }
-                "getBadge" -> {
-                    getBadgeNumber()
-                }
-                "getPendingNotifications" -> {
-                    args.getBoolean(0).let { clearFromDatabase ->
-                        controller.getPendingNotifications(clearFromDatabase)
-                    }
-                }
-                else -> false
+        val dispatcher = Main
+        when (action) {
+            "ready" -> {
+                ready()
             }
-            true
+            "getToken" -> {
+                CoroutineScope(dispatcher).launch { controller.getToken() }
+            }
+            "subscribe" -> {
+                args.getString(0)?.let { topic ->
+                    CoroutineScope(dispatcher).launch { controller.subscribe(topic) }
+                }
+            }
+            "unsubscribe" -> {
+                args.getString(0)?.let { topic ->
+                    CoroutineScope(dispatcher).launch { controller.unsubscribe(topic) }
+                }
+            }
+            "registerDevice" -> {
+                CoroutineScope(dispatcher).launch { registerWithPermission() }
+            }
+            "unregisterDevice" -> {
+                CoroutineScope(dispatcher).launch { controller.unregisterDevice() }
+            }
+            "clearNotifications" -> {
+                CoroutineScope(dispatcher).launch { clearNotifications() }
+            }
+            "sendLocalNotification" -> {
+                CoroutineScope(dispatcher).launch { sendLocalNotification(args) }
+            }
+            "setBadge" -> {
+                CoroutineScope(dispatcher).launch { setBadgeNumber() }
+            }
+            "getBadge" -> {
+                CoroutineScope(dispatcher).launch { getBadgeNumber() }
+            }
+            "getPendingNotifications" -> {
+                args.getBoolean(0).let { clearFromDatabase ->
+                    CoroutineScope(dispatcher).launch { controller.getPendingNotifications(clearFromDatabase) }
+                }
+            }
+            else -> return false
         }
-        return result
+        return true
     }
 
     override fun onRequestPermissionResult(requestCode: Int,
