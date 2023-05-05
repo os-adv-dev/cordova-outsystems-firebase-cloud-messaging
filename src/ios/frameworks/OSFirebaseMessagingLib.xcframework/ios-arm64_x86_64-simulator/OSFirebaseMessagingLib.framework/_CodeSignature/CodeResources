@@ -4,17 +4,13 @@
 <dict>
 	<key>files</key>
 	<dict>
-		<key>Frameworks/libswift_Concurrency.dylib</key>
-		<data>
-		8jAr9siC1LYuNutVC9bXB/7EQPQ=
-		</data>
 		<key>Headers/OSFirebaseMessagingLib-Swift.h</key>
 		<data>
 		AFJMO1MVgEBDBExAy6EMZUmtlCY=
 		</data>
 		<key>Info.plist</key>
 		<data>
-		xWE9J6AyUjCcBnOgh5kkBAgibNE=
+		gCNtgKo1Z0e70mZF0N/Uns6MyB4=
 		</data>
 		<key>Modules/OSFirebaseMessagingLib.swiftmodule/arm64-apple-ios-simulator.swiftdoc</key>
 		<data>
@@ -63,13 +59,6 @@
 	</dict>
 	<key>files2</key>
 	<dict>
-		<key>Frameworks/libswift_Concurrency.dylib</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			PCk7J0wBDMh4goBuzDNQls1T7qBCzpg99C2OeJma0Xk=
-			</data>
-		</dict>
 		<key>Headers/OSFirebaseMessagingLib-Swift.h</key>
 		<dict>
 			<key>hash2</key>
