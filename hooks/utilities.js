@@ -13,7 +13,7 @@ var constants = {
       return "platforms/android/app/src/main/res/raw";
     },
     getWWWFolder: function() {
-      return "platforms/android/app/src/main/assets/www";
+      return "www";
     }
   },
   ios: {
@@ -29,16 +29,14 @@ var constants = {
   }
 };
 
-function checkIfFileOrFolderExists(path) {
-  return fs.existsSync(path);
+function handleError(errorMessage, defer) {
+  console.log(errorMessage);
+  defer.reject();
 }
 
 
-function getFileName(dir, searchString, withExtension){
-  const files = fs.readdirSync(dir);
-  const matchingFiles = files.filter(file => file.includes(searchString) && file.endsWith(withExtension));
-  // return true if there are matching files, false otherwise
-  return matchingFiles.length > 0 ?matchingFiles[0] : "";
+function checkIfFileOrFolderExists(path) {
+  return fs.existsSync(path);
 }
 
 function removeFile(path){
@@ -69,7 +67,20 @@ function getPlatformConfigs(platform) {
 
 function getPlatformSoundPath(context, platformConfig){
   let projectRoot = context.opts.projectRoot;
-  return  path.join(projectRoot, platformConfig.getWWWFolder());
+  let platformPath;
+
+  if(platformConfig === constants.android){
+      platformPath = path.join(projectRoot, `platforms/android/www`);
+  } else {
+      let appName = getAppName(context)
+      platformPath = path.join(projectRoot, `platforms/ios/${appName}/Resources/www`);   
+  }
+      
+  if(!fs.existsSync(platformPath)){
+      platformPath = path.join(projectRoot, platformConfig.getWWWFolder());
+  }
+  
+  return platformPath
 }
 
 function isCordovaAbove(context, version) {
@@ -78,15 +89,15 @@ function isCordovaAbove(context, version) {
   return parseInt(sp[0]) >= version;
 }
 
+
 function copyFromSourceToDestPath(defer, sourcePath, destPath) {
   fs.createReadStream(sourcePath).pipe(fs.createWriteStream(destPath))
-  .on("close", function () {
-    console.log(`Finished copying ${sourcePath}.`);
+  .on("close", function (err) {
     defer.resolve();
   })
   .on("error", function (err) {
     console.log(err);
-    throw new Error (`OUTSYSTEMS_PLUGIN_ERROR: Something went wrong when trying to copy sounds files. Please check the logs for more information.`);
+    defer.reject();
   });
 }
 
@@ -102,6 +113,7 @@ function getAppName(context) {
 
 module.exports = {
   isCordovaAbove,
+  handleError,
   getPlatformConfigs,
   copyFromSourceToDestPath,
   getFilesFromPath,
@@ -111,6 +123,5 @@ module.exports = {
   removeFolder,
   isAndroid,
   getAppName,
-  getPlatformSoundPath,
-  getFileName
+  getPlatformSoundPath
 };
