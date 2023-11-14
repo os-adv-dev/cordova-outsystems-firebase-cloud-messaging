@@ -3,7 +3,7 @@ import OSCommonPluginLib
 import OSFirebaseMessagingLib
 
 @objc(OSFirebaseCloudMessaging)
-class OSFirebaseCloudMessaging: CDVPlugin {
+class OSFirebaseCloudMessaging: CDVPlugin, PlatformProtocol, FirebaseMessagingCallbackProtocol, FirebaseMessagingEventProtocol {
 
     var plugin: FirebaseMessagingController?
     var callbackId: String = ""
@@ -160,10 +160,10 @@ class OSFirebaseCloudMessaging: CDVPlugin {
         }
     }
 
-}
+// }
 
 // MARK: - OSCommonPluginLib's PlatformProtocol Methods
-extension OSFirebaseCloudMessaging: PlatformProtocol {
+// extension OSFirebaseCloudMessaging: PlatformProtocol {
     func sendResult(result: String?, error: NSError?, callBackID: String) {
         var pluginResult = CDVPluginResult(status: CDVCommandStatus_ERROR)
         
@@ -190,10 +190,10 @@ extension OSFirebaseCloudMessaging: PlatformProtocol {
             self.eventQueue = [js]
         }
     }
-}
+// }
 
 // MARK: - OSFirebaseMessagingLib's FirebaseMessagingCallbackProtocol Methods
-extension OSFirebaseCloudMessaging: FirebaseMessagingCallbackProtocol {
+// extension OSFirebaseCloudMessaging: FirebaseMessagingCallbackProtocol {
     func callback(result: String?, error: FirebaseMessagingErrors?) {
         if let error = error {
             self.sendResult(result: nil, error: error as NSError, callBackID: self.callbackId)
@@ -203,10 +203,10 @@ extension OSFirebaseCloudMessaging: FirebaseMessagingCallbackProtocol {
             }
         }
     }
-}
+// }
 
 // MARK: - OSFirebaseMessagingLib's FirebaseMessagingEventProtocol Methods
-extension OSFirebaseCloudMessaging: FirebaseMessagingEventProtocol {
+// extension OSFirebaseCloudMessaging: FirebaseMessagingEventProtocol {
     func event(_ event: FirebaseEventType, data: String) {
         var eventName = ""
         
