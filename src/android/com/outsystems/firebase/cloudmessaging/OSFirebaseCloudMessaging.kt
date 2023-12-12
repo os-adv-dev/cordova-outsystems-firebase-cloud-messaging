@@ -66,9 +66,9 @@ class OSFirebaseCloudMessaging : CordovaImplementation() {
         // Check if intent comes from an FCM notification. If not, we don't want to handle it
         // This is necessary so that we don't mistakenly deal with deep links thinking they're FCM notification clicks
         val googleMessageId = extras?.getString(GOOGLE_MESSAGE_ID) // for notifications automatically delivered by the FCM SDK
-        val fcmInternal = extras?.getBoolean(FCM_EXPLICIT_NOTIFICATION) // for notifications that we explicitly deliver in the FCM plugin
+        val fcmInternal = extras?.getString(FCM_EXPLICIT_NOTIFICATION) // for notifications that we explicitly deliver in the FCM plugin
 
-        if (googleMessageId.isNullOrEmpty() && (fcmInternal == false || fcmInternal == null)) {
+        if (googleMessageId.isNullOrEmpty() && fcmInternal.isNullOrEmpty()) {
             return
         }
 
