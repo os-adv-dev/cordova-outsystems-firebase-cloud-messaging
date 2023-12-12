@@ -37,7 +37,7 @@ class OSFirebaseCloudMessaging : CordovaImplementation() {
         private const val ERROR_FORMAT_PREFIX = "OS-PLUG-FCMS-"
         private const val NOTIFICATION_PERMISSION_REQUEST_CODE = 123123
         private const val NOTIFICATION_PERMISSION_SEND_LOCAL_REQUEST_CODE = 987987
-        const val FCM_EXPLICIT_NOTIFICATION = "fcm_explicit_notification"
+        const val FCM_EXPLICIT_NOTIFICATION = "com.outsystems.fcm.notification"
         const val GOOGLE_MESSAGE_ID = "google.message_id"
     }
 
