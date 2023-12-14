@@ -3,6 +3,7 @@ package com.outsystems.firebase.cloudmessaging;
 import android.content.Context
 import android.content.Intent
 import android.os.Build
+import android.util.Log
 import androidx.core.content.PermissionChecker.PERMISSION_GRANTED
 import androidx.core.content.PermissionChecker.PermissionResult
 import com.outsystems.osnotificationpermissions.OSNotificationPermissions
@@ -42,6 +43,7 @@ class OSFirebaseCloudMessaging : CordovaImplementation() {
     }
 
     override fun initialize(cordova: CordovaInterface, webView: CordovaWebView) {
+        Log.e("FCM - handleIntent", "entered initialize")
         super.initialize(cordova, webView)
         databaseManager = DatabaseManager.getInstance(getActivity())
         notificationManager = FirebaseNotificationManager(getActivity(), databaseManager)
@@ -55,11 +57,13 @@ class OSFirebaseCloudMessaging : CordovaImplementation() {
     }
 
     override fun onNewIntent(intent: Intent) {
+        Log.e("FCM - handleIntent", "entered onNewIntent")
         super.onNewIntent(intent)
         handleIntent(intent)
     }
 
     private fun handleIntent(intent: Intent) {
+        Log.e("FCM - handleIntent", "entered handleIntent")
         val extras = intent.extras
         val extrasSize = extras?.size() ?: 0
 
@@ -69,15 +73,19 @@ class OSFirebaseCloudMessaging : CordovaImplementation() {
         val fcmInternal = extras?.getString(FCM_EXPLICIT_NOTIFICATION) // for notifications that we explicitly deliver in the FCM plugin
 
         if (googleMessageId.isNullOrEmpty() && fcmInternal.isNullOrEmpty()) {
+            Log.e("FCM - handleIntent", "won't process, will return")
             return
         }
 
         if(extrasSize > 0) {
+            Log.e("FCM - handleIntent", "will process")
             val scheme = extras.getString(FirebaseMessagingOnActionClickActivity.ACTION_DEEP_LINK_SCHEME)
             if (scheme.isNullOrEmpty()) {
+                Log.e("FCM - handleIntent", "will call FirebaseMessagingOnClickActivity")
                 FirebaseMessagingOnClickActivity.notifyClickNotification(intent)
             }
             else {
+                Log.e("FCM - handleIntent", "will call FirebaseMessagingOnActionClickActivity")
                 FirebaseMessagingOnActionClickActivity.notifyClickAction(intent)
             }
         }
