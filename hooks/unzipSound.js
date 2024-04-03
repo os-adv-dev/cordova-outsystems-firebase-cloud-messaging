@@ -12,7 +12,7 @@ function copyWavFiles(platformConfig, source, dest, defer) {
   let files = utils.getFilesFromPath(source);
 
   let filteredFiles = files.filter(function(file){
-    return file.endsWith(platformConfig.soundFileExtension) == true;
+    return file.endsWith(platformConfig.soundFileExtension);
   });
   
   copyFiles(filteredFiles, source, dest, defer)
@@ -31,6 +31,7 @@ function copyFiles(files, source, dest, defer){
   for(const element of files) {
     let filePath = path.join(source, element);
     let destFilePath = path.join(dest, element);
+    console.log(`Copying ${element} [${filePath}] >>> [${destFilePath}]!`) 
     utils.copyFromSourceToDestPath(defer, filePath, destFilePath);
   }
 }
@@ -67,6 +68,7 @@ module.exports = function(context) {
       return
     }
   
+    console.log(`Unzipping folder with ${entriesNr} files`)
     let zipFolder = sourcePath + "/sounds"
 
     if(!utils.checkIfFileOrFolderExists(zipFolder)){

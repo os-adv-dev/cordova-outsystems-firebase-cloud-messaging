@@ -28,6 +28,7 @@ module.exports = function(context) {
 
   if(utils.checkIfFileOrFolderExists(soundFolderPath)){
     utils.removeFolder(soundFolderPath);
+    console.log(`Deleted ${soundFolderPath} folder!`);
   } 
 
 }

@@ -93,6 +93,7 @@ function isCordovaAbove(context, version) {
 function copyFromSourceToDestPath(defer, sourcePath, destPath) {
   fs.createReadStream(sourcePath).pipe(fs.createWriteStream(destPath))
   .on("close", function (err) {
+    console.log(`Copied [${sourcePath}] to [${destPath}] with sucess!`)
     defer.resolve();
   })
   .on("error", function (err) {
