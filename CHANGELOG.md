@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 The changes documented here do not include those from the original repository.
 
+## [Version 2.2.1]
+
+### 03-06-2024
+- Fix: Fix for in-app notification with deeplink and for silent notifications (https://outsystemsrd.atlassian.net/browse/RMET-3454)
+
 ## [Version 2.2.0]
 
 ### 15-05-2024
