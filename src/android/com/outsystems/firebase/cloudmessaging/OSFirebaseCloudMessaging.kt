@@ -238,9 +238,9 @@ class OSFirebaseCloudMessaging : CordovaImplementation() {
         val pendingNotificationNullableList = controller.getPendingNotifications(clearFromDatabase)
 
         Log.d("FCMPlugin - GetPendingNotifications", "after calling controller.getPendingNotifications")
-        
+
         if (pendingNotificationNullableList == null) {
-            Log.d("FCMPlugin - GetPendingNotifications", "first error")
+            Log.d("FCMPlugin - GetPendingNotifications", "list is null")
             errorCallback()
             return
         }
