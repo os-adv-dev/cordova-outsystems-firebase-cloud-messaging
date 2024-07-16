@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
+import android.util.Log
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.outsystems.plugins.firebasemessaging.controller.*
@@ -232,6 +233,7 @@ class OSFirebaseCloudMessaging : CordovaImplementation() {
         val pendingNotificationNullableList = controller.getPendingNotifications(clearFromDatabase)
         pendingNotificationNullableList?.let { pendingNotificationList ->
             gson.toJson(pendingNotificationList)?.let { jsonString ->
+                Log.d("FCMPlugin - GetPendingNotifications", jsonString)
                 sendSuccess(callbackContext, jsonString)
             } ?: errorCallback
         } ?: errorCallback
