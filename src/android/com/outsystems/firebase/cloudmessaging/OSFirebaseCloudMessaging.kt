@@ -226,17 +226,31 @@ class OSFirebaseCloudMessaging : CordovaImplementation() {
     }
 
     private fun getPendingNotifications(clearFromDatabase: Boolean, callbackContext: CallbackContext) {
+
+        Log.d("FCMPlugin - GetPendingNotifications", "inside getPendingNotifications")
+
         val errorCallback: () -> Unit = {
             sendError(callbackContext, FirebaseMessagingError.GET_PENDING_NOTIFICATIONS_ERROR)
         }
 
+        Log.d("FCMPlugin - GetPendingNotifications", "about to call controller.getPendingNotifications")
+
         val pendingNotificationNullableList = controller.getPendingNotifications(clearFromDatabase)
+
+        Log.d("FCMPlugin - GetPendingNotifications", "after calling controller.getPendingNotifications")
+
         pendingNotificationNullableList?.let { pendingNotificationList ->
             gson.toJson(pendingNotificationList)?.let { jsonString ->
                 Log.d("FCMPlugin - GetPendingNotifications", jsonString)
                 sendSuccess(callbackContext, jsonString)
-            } ?: errorCallback
-        } ?: errorCallback
+            } ?: {
+                Log.d("FCMPlugin - GetPendingNotifications", "first error")
+                errorCallback
+            }
+        } ?: {
+            Log.d("FCMPlugin - GetPendingNotifications", "second error")
+            errorCallback
+        }
     }
 
     override fun onRequestPermissionResult(requestCode: Int,
