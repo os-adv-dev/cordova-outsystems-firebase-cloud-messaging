@@ -241,8 +241,9 @@ class OSFirebaseCloudMessaging : CordovaImplementation() {
 
         if (pendingNotificationNullableList == null) {
             Log.d("FCMPlugin - GetPendingNotifications", "list is null")
-            errorCallback()
         }
+
+        Log.d("FCMPlugin - GetPendingNotifications", "About to do let")
 
         pendingNotificationNullableList?.let { pendingNotificationList ->
             gson.toJson(pendingNotificationList)?.let { jsonString ->
@@ -256,6 +257,9 @@ class OSFirebaseCloudMessaging : CordovaImplementation() {
             Log.d("FCMPlugin - GetPendingNotifications", "second error")
             errorCallback()
         }
+
+        Log.d("FCMPlugin - GetPendingNotifications", "After let")
+
     }
 
     override fun onRequestPermissionResult(requestCode: Int,
