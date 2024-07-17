@@ -247,16 +247,9 @@ class OSFirebaseCloudMessaging : CordovaImplementation() {
 
         pendingNotificationNullableList?.let { pendingNotificationList ->
             gson.toJson(pendingNotificationList)?.let { jsonString ->
-                Log.d("FCMPlugin - GetPendingNotifications", jsonString)
                 sendSuccess(callbackContext, jsonString)
-            } ?: {
-                Log.d("FCMPlugin - GetPendingNotifications", "first error")
-                errorCallback()
-            }
-        } ?: {
-            Log.d("FCMPlugin - GetPendingNotifications", "second error")
-            errorCallback()
-        }
+            } ?: errorCallback()
+        } ?: errorCallback()
 
         Log.d("FCMPlugin - GetPendingNotifications", "After let")
 
