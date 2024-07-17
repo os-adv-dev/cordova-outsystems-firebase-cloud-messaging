@@ -242,7 +242,6 @@ class OSFirebaseCloudMessaging : CordovaImplementation() {
         if (pendingNotificationNullableList == null) {
             Log.d("FCMPlugin - GetPendingNotifications", "list is null")
             errorCallback()
-            return
         }
 
         pendingNotificationNullableList?.let { pendingNotificationList ->
@@ -251,11 +250,11 @@ class OSFirebaseCloudMessaging : CordovaImplementation() {
                 sendSuccess(callbackContext, jsonString)
             } ?: {
                 Log.d("FCMPlugin - GetPendingNotifications", "first error")
-                errorCallback
+                errorCallback()
             }
         } ?: {
             Log.d("FCMPlugin - GetPendingNotifications", "second error")
-            errorCallback
+            errorCallback()
         }
     }
 
