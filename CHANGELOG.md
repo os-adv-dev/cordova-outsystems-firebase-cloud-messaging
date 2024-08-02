@@ -6,7 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 The changes documented here do not include those from the original repository.
 
-## [Unreleased]
+## [Version 2.3.1]
 
 ### Fixes
 - Fixes notification click when notification is delievered while the app is in foreground (https://outsystemsrd.atlassian.net/browse/RMET-3559).
