@@ -9,6 +9,13 @@ The changes documented here do not include those from the original repository.
 ## [Unreleased]
 
 ### Fixes
+- Fixes notification click when notification is delievered while the app is in foreground (https://outsystemsrd.atlassian.net/browse/RMET-3559).
+- Removes protected/reserverd keys from being sent as deeplink parameters data when clicking notification, and also when receiving in-app notifications. (https://outsystemsrd.atlassian.net/browse/RMET-3559).
+
+### Chores:
+- Update `OSFirebaseMessagingLib` Android library to version `1.2.1`.
+
+### Fixes
 - Remove return by callbacks, eliminating the disalignment with the threads where the methods are being called (https://outsystemsrd.atlassian.net/browse/RMET-3554).
 
 ### Chores:
