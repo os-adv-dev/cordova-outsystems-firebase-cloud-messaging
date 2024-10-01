@@ -85,6 +85,10 @@
     <source-file src="src/android/com/outsystems/firebase/cloudmessaging/OSFirebaseCloudMessaging.kt" target-dir="app/src/main/kotlin/com/outsystems/firebase/cloudmessaging"/>
     <framework src="src/android/com/outsystems/firebase/cloudmessaging/build.gradle" custom="true" type="gradleReference" />
 
+    <!-- move AAR files to the project -->
+    <source-file src="src/android/com/outsystems/firebase/cloudmessaging/OSFirebaseMessagingLib-Android-debug.aar" target-dir="app/libs/" />
+    <source-file src="src/android/com/outsystems/firebase/cloudmessaging/OSLocalNotificationsLib-Android-debug.aar" target-dir="app/libs/" />
+
   </platform>
   
 </plugin>

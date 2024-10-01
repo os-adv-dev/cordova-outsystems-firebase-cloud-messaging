@@ -25,8 +25,8 @@ dependencies {
     implementation("com.github.outsystems:oscordova-android:2.0.1@aar")
 
     // Temporary use local AAR Files , waiting R&D accept the fix and release to OutSystems Forge.
-    implementation files("../com.outsystems.firebase.cloudmessaging/OSLocalNotificationsLib-Android-debug.aar")
-    implementation files("../com.outsystems.firebase.cloudmessaging/OSFirebaseMessagingLib-Android-debug.aar")
+    implementation files("../app/libs/OSLocalNotificationsLib-Android-debug.aar")
+    implementation files("../app/libs/OSFirebaseMessagingLib-Android-debug.aar")
 
     //implementation("com.github.outsystems:osfirebasemessaging-android:1.2.2@aar")
     //implementation("com.github.outsystems:oslocalnotifications-android:1.0.0@aar")
