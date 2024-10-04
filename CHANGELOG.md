@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 The changes documented here do not include those from the original repository.
 
+## [Unreleased]
+### 04-10-2024
+- Feat: Handle icon and color parameters in setupNotificationBuilder for Android 12+ compatibility
+
 ## [Version 2.3.2]
 
 ### Features
