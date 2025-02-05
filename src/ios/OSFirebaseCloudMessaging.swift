@@ -51,6 +51,41 @@ class OSFirebaseCloudMessaging: CDVPlugin {
             }
         }
     }
+
+    @objc(requestPermission:)
+    func requestPermission(command: CDVInvokedUrlCommand){
+        Task {
+            let center = UNUserNotificationCenter.current()
+            do {
+                let granted = try await center.requestAuthorization(options: [.alert, .sound, .badge])
+                let result = CDVPluginResult(status: CDVCommandStatus_OK, messageAs: granted)
+                self.commandDelegate.send(result, callbackId: command.callbackId)
+            } catch {
+                let result = CDVPluginResult(status: CDVCommandStatus_ERROR, messageAs: "Failed to request permissions")
+                self.commandDelegate.send(result, callbackId: command.callbackId)
+            }
+        }
+    }
+    
+    @objc(hasPermission:)
+    func hasPermission(command: CDVInvokedUrlCommand) {
+        let center = UNUserNotificationCenter.current()
+        center.getNotificationSettings { settings in
+            var permissionGranted = false
+
+            switch settings.authorizationStatus {
+            case .authorized, .provisional, .ephemeral:
+                permissionGranted = true
+            case .denied, .notDetermined:
+                permissionGranted = false
+            @unknown default:
+                permissionGranted = false
+            }
+
+            let result = CDVPluginResult(status: CDVCommandStatus_OK, messageAs: permissionGranted)
+            self.commandDelegate.send(result, callbackId: command.callbackId)
+        }
+    }
     
     @objc(getPendingNotifications:)
     func getPendingNotifications(command: CDVInvokedUrlCommand) {

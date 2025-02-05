@@ -36,6 +36,14 @@ exports.registerDevice = function (success, error) {
     exec(success, error, 'OSFirebaseCloudMessaging', 'registerDevice');
 };
 
+exports.requestPermission = function (success, error) {
+    exec(success, error, 'OSFirebaseCloudMessaging', 'requestPermission');
+};
+
+exports.hasPermission = function (success, error) {
+    exec(success, error, 'OSFirebaseCloudMessaging', 'hasPermission');
+};
+
 exports.unregisterDevice = function (success, error) {
     exec(success, error, 'OSFirebaseCloudMessaging', 'unregisterDevice');
 };
