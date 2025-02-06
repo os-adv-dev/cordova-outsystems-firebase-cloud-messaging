@@ -267,7 +267,7 @@ class OSFirebaseCloudMessaging : CordovaImplementation() {
         return false
     }
 
-    fun requestPermission(callbackContext: CallbackContext) {
+    private fun requestPermission(callbackContext: CallbackContext) {
         CoroutineScope(IO).launch {
             flow = MutableSharedFlow(replay = 1)
 
@@ -293,7 +293,7 @@ class OSFirebaseCloudMessaging : CordovaImplementation() {
         }
     }
 
-    fun hasPermission(callbackContext: CallbackContext) {
+    private fun hasPermission(callbackContext: CallbackContext) {
         CoroutineScope(IO).launch {
             val hasPermission = Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU ||
                     checkPermission(Manifest.permission.POST_NOTIFICATIONS)
