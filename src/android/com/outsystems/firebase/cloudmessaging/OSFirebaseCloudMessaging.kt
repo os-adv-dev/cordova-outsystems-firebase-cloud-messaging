@@ -269,21 +269,25 @@ class OSFirebaseCloudMessaging : CordovaImplementation() {
 
     fun requestPermission(callbackContext: CallbackContext) {
         CoroutineScope(IO).launch {
-            // Check if permission is already granted
-            val hasPermission = Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU ||
-                    checkPermission(Manifest.permission.POST_NOTIFICATIONS)
+            flow = MutableSharedFlow(replay = 1)
 
-            if (hasPermission) {
-                sendSuccess(callbackContext, true.toString()) // Permission already granted
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+                // API < 33: Always granted by default
+                sendSuccess(callbackContext, true)
+                return@launch
+            }
+
+            if (checkPermission(Manifest.permission.POST_NOTIFICATIONS)) {
+                // If permission is already granted
+                sendSuccess(callbackContext, true)
             } else {
                 // Request permission
                 requestPermission(NOTIFICATION_PERMISSION_REQUEST_CODE, Manifest.permission.POST_NOTIFICATIONS)
 
-                // Observe permission response
-                flow = MutableSharedFlow(replay = 1)
+                // Collect the permission response
                 flow?.collect {
                     val granted = it == OSFCMPermissionEvents.Granted
-                    sendSuccess(callbackContext, granted.toString())
+                    sendSuccess(callbackContext, granted)
                 }
             }
         }
@@ -294,7 +298,7 @@ class OSFirebaseCloudMessaging : CordovaImplementation() {
             val hasPermission = Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU ||
                     checkPermission(Manifest.permission.POST_NOTIFICATIONS)
 
-            sendSuccess(callbackContext, hasPermission.toString())
+            sendSuccess(callbackContext, hasPermission)
         }
     }
 
