@@ -142,6 +142,13 @@ class OSFirebaseCloudMessaging : CordovaImplementation() {
                     getToken(callbackContext)
                 }
 
+                "requestPermission" -> {
+                    requestPermission(callbackContext)
+                }
+                "hasPermission" -> {
+                    hasPermission(callbackContext)
+                }
+
                 "subscribe" -> {
                     args.getString(0)?.let {
                         topicOperation(
@@ -258,6 +265,37 @@ class OSFirebaseCloudMessaging : CordovaImplementation() {
     override fun areGooglePlayServicesAvailable(): Boolean {
         // Not used in this project.
         return false
+    }
+
+    fun requestPermission(callbackContext: CallbackContext) {
+        CoroutineScope(IO).launch {
+            // Check if permission is already granted
+            val hasPermission = Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU ||
+                    checkPermission(Manifest.permission.POST_NOTIFICATIONS)
+
+            if (hasPermission) {
+                sendSuccess(callbackContext, true.toString()) // Permission already granted
+            } else {
+                // Request permission
+                requestPermission(NOTIFICATION_PERMISSION_REQUEST_CODE, Manifest.permission.POST_NOTIFICATIONS)
+
+                // Observe permission response
+                flow = MutableSharedFlow(replay = 1)
+                flow?.collect {
+                    val granted = it == OSFCMPermissionEvents.Granted
+                    sendSuccess(callbackContext, granted.toString())
+                }
+            }
+        }
+    }
+
+    fun hasPermission(callbackContext: CallbackContext) {
+        CoroutineScope(IO).launch {
+            val hasPermission = Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU ||
+                    checkPermission(Manifest.permission.POST_NOTIFICATIONS)
+
+            sendSuccess(callbackContext, hasPermission.toString())
+        }
     }
 
     private suspend fun registerDevice(callbackContext: CallbackContext) {
