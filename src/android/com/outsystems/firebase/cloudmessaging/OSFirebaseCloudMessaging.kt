@@ -4,7 +4,10 @@ import android.Manifest
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Build
+import android.provider.Settings
+import androidx.core.app.NotificationManagerCompat
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.outsystems.plugins.firebasemessaging.controller.*
@@ -177,6 +180,18 @@ class OSFirebaseCloudMessaging : CordovaImplementation() {
                     registerDevice(callbackContext)
                 }
 
+                "requestPermission" -> {
+                    requestPermission(callbackContext)
+                }
+
+                "openNotificationSettings" -> {
+                    openNotificationSettings(callbackContext)
+                }
+
+                "hasPermission" -> {
+                    hasPermission(callbackContext)
+                }
+
                 "unregisterDevice" -> {
                     unregisterDevice(callbackContext)
                 }
@@ -295,11 +310,39 @@ class OSFirebaseCloudMessaging : CordovaImplementation() {
 
     private fun hasPermission(callbackContext: CallbackContext) {
         CoroutineScope(IO).launch {
-            val hasPermission = Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU ||
-                    checkPermission(Manifest.permission.POST_NOTIFICATIONS)
+            val context = getActivity().applicationContext
+            val notificationManager = NotificationManagerCompat.from(context)
+
+            val hasPermission = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                // For Android 13+ (API 33+), check POST_NOTIFICATIONS permission
+                checkPermission(Manifest.permission.POST_NOTIFICATIONS)
+            } else {
+                // For Android 12 and below, check if notifications are enabled in system settings
+                notificationManager.areNotificationsEnabled()
+            }
 
             sendSuccess(callbackContext, hasPermission)
         }
+    }
+
+    private fun openNotificationSettings(callbackContext: CallbackContext) {
+        val context = getActivity().applicationContext
+        val intent = Intent()
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            // ✅ Open specific app notification settings (Android 8.0+)
+            intent.action = Settings.ACTION_APP_NOTIFICATION_SETTINGS
+            intent.putExtra(Settings.EXTRA_APP_PACKAGE, context.packageName)
+        } else {
+            // ✅ Fallback: Open general app settings for older versions
+            intent.action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
+            intent.data = Uri.parse("package:${context.packageName}")
+        }
+
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+        context.startActivity(intent)
+
+        sendSuccess(callbackContext)
     }
 
     private suspend fun registerDevice(callbackContext: CallbackContext) {
@@ -342,19 +385,8 @@ class OSFirebaseCloudMessaging : CordovaImplementation() {
         val text = args.get(2).toString()
         val channelName = args.get(3).toString()
         val channelDescription = args.get(4).toString()
-        val color =  args.get(5).toString()
-        val icon =  args.get(6).toString()
 
-        val result = controller.sendLocalNotification(
-            number = badge,
-            title = title,
-            text = text,
-            image = null,
-            color = color,
-            icon = icon,
-            channelName = channelName,
-            channelDescription = channelDescription
-        )
+        val result = controller.sendLocalNotification(badge, title, text, null, channelName, channelDescription)
         if (result.first) {
             sendSuccess(callbackContext)
         } else {
@@ -405,8 +437,12 @@ class OSFirebaseCloudMessaging : CordovaImplementation() {
         return ERROR_FORMAT_PREFIX + code.toString().padStart(4, '0')
     }
 
-    private fun sendSuccess(callbackContext: CallbackContext, stringValue: String? = null) {
-        val pluginResult = stringValue?.let { PluginResult(Status.OK, it) } ?: PluginResult(Status.OK)
+    private fun sendSuccess(callbackContext: CallbackContext, value: Any? = null) {
+        val pluginResult = when (value) {
+            is Boolean -> PluginResult(Status.OK, value) // ✅ Correctly handles Boolean
+            is String -> PluginResult(Status.OK, value)
+            else -> PluginResult(Status.OK)
+        }
         callbackContext.sendPluginResult(pluginResult)
     }
 

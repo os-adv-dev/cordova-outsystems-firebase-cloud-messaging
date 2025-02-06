@@ -44,6 +44,10 @@ exports.hasPermission = function (success, error) {
     exec(success, error, 'OSFirebaseCloudMessaging', 'hasPermission');
 };
 
+exports.openNotificationSettings = function (success, error) {
+    exec(success, error, 'OSFirebaseCloudMessaging', 'openNotificationSettings');
+};
+
 exports.unregisterDevice = function (success, error) {
     exec(success, error, 'OSFirebaseCloudMessaging', 'unregisterDevice');
 };
